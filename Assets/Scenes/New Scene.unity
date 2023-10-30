@@ -1311,7 +1311,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 2.0
+  m_text: 15.0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c75f5ce9ef852f24a94d647bde7db7a0, type: 2}
   m_sharedMaterial: {fileID: 6002007717190264384, guid: c75f5ce9ef852f24a94d647bde7db7a0, type: 2}
@@ -1778,6 +1778,13 @@ MonoBehaviour:
   - {fileID: 1492344332}
   - {fileID: 736765139}
   - {fileID: 513630357}
+  AllTextMultiply:
+  - {fileID: 1906072095}
+  - {fileID: 114402942}
+  - {fileID: 273127159}
+  - {fileID: 1932875215}
+  - {fileID: 1617605894}
+  - {fileID: 1803750709}
   CashOutText: {fileID: 258866780}
   EarnText: {fileID: 1823746670}
   MultiplyText: {fileID: 1823746670}
@@ -1793,10 +1800,11 @@ MonoBehaviour:
   GameStarted: 0
   Currency: 100
   MultiplyTarget: 0
-  TargetMoney: 0
+  TargetMoney: 1
   CashOut: 0
   EarnValue: 0
-  Multiply: 2
+  Multiply: 15
+  FinalSecond: 30
   CompletionTime: 0
   curve:
     serializedVersion: 2
@@ -2967,10 +2975,10 @@ MonoBehaviour:
   bugObject: {fileID: 1421977594}
   points: []
   resolution: 2
-  lastVertexX: 729.63116
-  lastVertexY: 85.63778
-  VertexX: 17.049253
-  VertexY: -0.25338864
+  lastVertexX: 8.5
+  lastVertexY: 10
+  VertexX: 8.5
+  VertexY: 5
   thickness: 17
 --- !u!222 &548939530
 CanvasRenderer:
@@ -3509,7 +3517,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7775902, g: 0.2688679, b: 1, a: 1}
+  m_Color: {r: 0.7775902, g: 0.2688679, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4029,7 +4037,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u200B"
+  m_text: "1\u200B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c75f5ce9ef852f24a94d647bde7db7a0, type: 2}
   m_sharedMaterial: {fileID: 6002007717190264384, guid: c75f5ce9ef852f24a94d647bde7db7a0, type: 2}
@@ -4472,7 +4480,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.60784316, g: 0.5764706, b: 0.93725497, a: 0}
+  m_Color: {r: 0.60784316, g: 0.5764706, b: 0.93725497, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7691,7 +7699,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1940273821}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -8383,7 +8391,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 19, y: 32.8}
-  m_SizeDelta: {x: 54.5324, y: 23.3077}
+  m_SizeDelta: {x: 112.5452, y: 23.3077}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2063890782
 GameObject:
@@ -8712,7 +8720,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: 
+  m_Text: 1
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0

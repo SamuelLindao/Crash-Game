@@ -20,6 +20,7 @@ public class GameController : MonoBehaviour
     public GameObject line;
     public TextMeshProUGUI Seconds;
     public List<TextMeshProUGUI> AllText;
+    public List<TextMeshProUGUI> AllTextMultiply;
 
     [Space]
     public TextMeshProUGUI CashOutText;
@@ -43,7 +44,7 @@ public class GameController : MonoBehaviour
     public float CashOut;
     public float EarnValue;
     public float Multiply = 1.0f;
-    //public int FinalSecond;
+    public int FinalSecond = 30;
     [Space]
     public float CompletionTime;
     public AnimationCurve curve;
@@ -55,9 +56,11 @@ public class GameController : MonoBehaviour
     float fullTime;
     private void Start()
     {
-        Field.text = "0,00";
+        Field.text = "1,00";
+        ValueChanged();
+
         CashOut = 2.0f;
-        MultiplyTarget = 2.0f;
+        MultiplyTarget = 10.0f;
     }
 
     private void Update()
@@ -75,7 +78,7 @@ public class GameController : MonoBehaviour
 
         GameMultiplyText.gameObject.SetActive(GameStarted);
         CurrentBalance.text = Currency.ToString("0.0");
-        Multiply = Mathf.Clamp(Multiply, 1.0f, 2.0f);
+        Multiply = Mathf.Clamp(Multiply, 1.0f, 100f);
         //MultiplyText.text = Multiply.ToString("0.0") + "x";
         EarnValue = TargetMoney * Multiply;
         EarnText.text = EarnValue.ToString("0.0");
@@ -83,14 +86,15 @@ public class GameController : MonoBehaviour
 
         if (GameStarted)
         {
-
+           
             if (TotalTime > 10)
             {
                 AllText[AllText.Count - 1].text = TotalTime.ToString() + "s";
             }
             LineTarget.transform.localPosition = new Vector3(131, 210 * ((MultiplyTarget - 1) / 1f));
-            CompletionTime = curve.Evaluate(5 * ((float)TotalTime / 30f));
-            Multiply = Mathf.Clamp(1f + (Line.lastVertexY / 210), 1f, 2f);
+            CompletionTime = curve.Evaluate(30 * ((float)DateTime.Now.Subtract(GameInit).TotalSeconds / 30f));
+            print(CompletionTime);
+            Multiply = (CompletionTime / 2);
             GameMultiplyText.text = Multiply.ToString("0.00") + "x";
             //GameMultiplyText.text = Multiply.ToString("0.00") + "x";
             line.transform.DOLocalMove (new Vector3(Line.lastVertexX, Line.lastVertexY),1f);
@@ -98,11 +102,33 @@ public class GameController : MonoBehaviour
             {
                 Grid.gridSize += new Vector2(0.005f + Time.deltaTime, 0);
             }
+            if (Bug.transform.localPosition.y >= 210)
+            {
+                Grid.gridSize += new Vector2(0,0.05f + Time.deltaTime);
+
+                for(int i =0; i < AllTextMultiply.Count;i++)
+                {
+                    if(i == AllTextMultiply.Count - 1)
+                    {
+                        AllTextMultiply[i].text = Mathf.RoundToInt(Multiply).ToString() + "x";
+                    }
+                    else
+                    {
+                        AllTextMultiply[i].text = Mathf.RoundToInt(Multiply * (0.2f * i)).ToString() + "x";
+                        if(i == 0)
+                        {
+                            AllTextMultiply[i].text = 1.ToString() + "x";
+
+                        }
+                    }
+                    
+                }
+            }
             if (initTime != TotalTime)
             {
                 GameMultiplyText.transform.DOShakePosition(1f, 5, 15, 90);
             }
-            if (TotalTime >= 30)
+            if (TotalTime >= FinalSecond)
             {
                 StopGame(false);
             }
@@ -123,15 +149,15 @@ public class GameController : MonoBehaviour
             
                 if (Line.points.Count > 1)
                 {
-                    yield return new WaitForSeconds(1.0f);
+                    yield return new WaitForSeconds(0.01f);
 
-                    float restY = ((11 * (CompletionTime / 5) + Line.points[Line.points.Count - 1].y)) / 2f ;
+                    float restY = ((11 * (CompletionTime / 14) + Line.points[Line.points.Count - 1].y)) / 2f ;
                     float restX = ((float)DateTime.Now.Subtract(GameInit).TotalSeconds + Line.points[Line.points.Count - 1].x) / 2f;
                     Line.points.Add(new Vector2(restX, restY));
 
                 }
                 
-                    Line.points.Add(new Vector2((float)DateTime.Now.Subtract(GameInit).TotalSeconds, 11 * (CompletionTime / 5)));
+                    Line.points.Add(new Vector2((float)DateTime.Now.Subtract(GameInit).TotalSeconds, 11 * (CompletionTime / 14)));
                     Line.SetVerticesDirty();
             
             yield return new WaitForSeconds(0.0005f);
@@ -172,23 +198,27 @@ public class GameController : MonoBehaviour
         }
         else
         {
+            FinalSecond = UnityEngine.Random.Range(30, 60);
+
             Line.lastVertexY = 0;
             MultiplyTarget = Multiply;
             Multiply = 1;
-            curve.AddKey(15f, 0);
-            curve.AddKey(25f, 0);
+            //curve.AddKey(15f, 0);
+            //curve.AddKey(25f, 0);
 
             for (int i = 0; i < curve.keys.Length; i++)
             {
                 Keyframe newFrame = curve.keys[i];
-                newFrame.value = UnityEngine.Random.Range(0f, 5.0f);
+                newFrame.value = UnityEngine.Random.Range(50f, 70f);
+                newFrame.outTangent = 0;
+                newFrame.inTangent = 0;
                 if (i == 0)
                 {
                     newFrame.value = 0;
                 }
-                else if(i == 3)
+                else if(i == 1)
                 {
-                    newFrame.time = 30;
+                    newFrame.time = UnityEngine.Random.Range(60, 80f);
 
                 }
                 curve.MoveKey(i, newFrame);
@@ -237,14 +267,14 @@ public class GameController : MonoBehaviour
 
         }
         Multiply = 1.0f;
-        ModifyMultiply(0.4f);
+        ModifyMultiply(9f);
         MultiplyTarget = 2;
     }
     public void ModifyMultiply(float value)
     {
         if (!GameStarted)
         {
-            Multiply = Mathf.Clamp(Multiply + value, 1.2f, 2.0f);
+            Multiply = Mathf.Clamp(Multiply + value, 1.2f, 100f);
             CashOutText.text = Multiply.ToString("0.0") + "x";
             EarnValue = TargetMoney * Multiply;
             EarnText.text = EarnValue.ToString("0.0");
@@ -261,10 +291,10 @@ public class GameController : MonoBehaviour
             Field.text = Currency.ToString() ;
             TargetMoney = Currency;
         }
-        if(TargetMoney< 0)
+        if(TargetMoney< 1)
         {
             Field.text = "0";
-            TargetMoney = 0;
+            TargetMoney = 1;
         }
         EarnValue = TargetMoney * Multiply;
         EarnText.text = EarnValue.ToString("0.0");
